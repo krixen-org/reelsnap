@@ -1,0 +1,38 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# FastAPI / Uvicorn
+*.log
+
+# Pytest / coverage
+.pytest_cache/
+coverage/
+htmlcov/
+.coverage
+.coverage.*
+
+# Mypy
+.mypy_cache/
+
+# Ruff / pylint
+.ruff_cache/
+.pylint.d/
+
+# Build / distribution
+build/
+dist/
+*.egg-inf*
