@@ -65,16 +65,11 @@ def extract_formats(info):
     return formats_video[:10], formats_audio[:10]
 
 
-def handler(request):
-    """Vercel serverless function handler"""
+def handler(event, context):
+    """Vercel serverless function handler (AWS Lambda format)"""
     try:
-        # Get request method
-        method = getattr(request, 'method', 'POST')
-        if hasattr(request, 'httpMethod'):
-            method = request.httpMethod
-        
         # Handle CORS preflight
-        if method == "OPTIONS":
+        if event.get("httpMethod") == "OPTIONS":
             return {
                 "statusCode": 200,
                 "headers": {
@@ -86,22 +81,14 @@ def handler(request):
             }
         
         # Get request body
-        body = b''
-        if hasattr(request, 'body'):
-            body = request.body
-        elif hasattr(request, 'get_body'):
-            body = request.get_body()
+        body_str = event.get("body", "{}")
+        if isinstance(body_str, bytes):
+            body_str = body_str.decode('utf-8')
         
-        if isinstance(body, str):
-            body = body.encode('utf-8')
-        
-        # Parse JSON body
-        data = {}
-        if body:
-            try:
-                data = json.loads(body.decode('utf-8'))
-            except:
-                pass
+        try:
+            data = json.loads(body_str)
+        except:
+            data = {}
         
         url = data.get("url", "").strip()
         
