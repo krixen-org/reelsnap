@@ -1,76 +1,154 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app) with a FastAPI backend for handling video downloads from platforms like YouTube, Instagram, and Twitter.
+# 🎬 ReelSnap - Video Downloader
 
-## Getting Started
+Free, fast, and easy video downloads from YouTube, Instagram, and Twitter.
 
-### Frontend (Next.js)
+## 🚀 Quick Start
 
-First, run the development server:
+### One Command to Start Everything!
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+That's it! This will automatically start:
+- ✅ Next.js frontend (http://localhost:3000)
+- ✅ FastAPI backend (http://127.0.0.1:8000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**No need to run servers separately!**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📋 Prerequisites
 
-### Backend (FastAPI)
+1. **Node.js** (v18 or higher)
+   - Install from [nodejs.org](https://nodejs.org/)
 
-The backend is built with FastAPI and provides endpoints for fetching video and audio formats from YouTube, Instagram, and Twitter using yt-dlp.
+2. **Python** (v3.9 or higher)
+   - Install from [python.org](https://www.python.org/)
 
-1. **Install Python Dependencies:**
-
-   Navigate to the `server` directory and install the required packages:
+3. **Install Dependencies**
 
    ```bash
+   # Install Node.js dependencies
+   npm install
+   
+   # Install Python dependencies
    cd server
-   pip install -r requirements.txt
+   python -m pip install -r requirements.txt
+   cd ..
    ```
 
-   The dependencies include:
-   - `fastapi`: Web framework for building APIs.
-   - `uvicorn`: ASGI server for running FastAPI.
-   - `yt-dlp`: Tool for downloading videos from various platforms.
-   - `python-multipart`: For handling multipart form data.
+## 🎯 Usage
 
-2. **Run the Backend Server:**
+### Development
 
-   From the `server` directory, start the FastAPI server:
+```bash
+# Start both frontend and backend
+npm run dev
+```
 
+Then open your browser to: **http://localhost:3000**
+
+### Build for Production
+
+```bash
+npm run build
+npm start
+```
+
+## 🌐 Deploy to Vercel
+
+Everything is configured for single deployment!
+
+1. **Push to GitHub**
    ```bash
-   uvicorn main:app --reload
+   git add .
+   git commit -m "Ready for deployment"
+   git push
    ```
 
-   The server will run on [http://localhost:8000](http://localhost:8000). You can access the API documentation at [http://localhost:8000/docs](http://localhost:8000/docs).
+2. **Deploy on Vercel**
+   - Go to [vercel.com](https://vercel.com)
+   - Click "New Project"
+   - Import your repository
+   - Click "Deploy"
 
-   **Endpoints:**
-   - `POST /youtube`: Fetch video/audio formats from a YouTube URL.
-   - `POST /instagram`: Fetch video/audio formats from an Instagram URL.
-   - `POST /twitter`: Fetch video/audio formats from a Twitter URL.
+**That's it!** Vercel will automatically:
+- ✅ Build your Next.js app
+- ✅ Deploy Python serverless functions
+- ✅ Everything works together!
 
-   Each endpoint expects a JSON payload with a `url` field, e.g., `{"url": "https://www.youtube.com/watch?v=example"}`.
+## 📁 Project Structure
 
-   **CORS Configuration:** The backend is configured to allow requests from any origin for development. Update `allow_origins` in `main.py` for production.
+```
+├── api/                  # Python serverless functions (for Vercel)
+│   ├── youtube.py
+│   ├── instagram.py
+│   └── twitter.py
+├── server/               # FastAPI backend (for local dev)
+│   ├── main.py
+│   └── requirements.txt
+├── src/                  # Next.js frontend
+│   ├── app/
+│   └── lib/
+│       └── api.ts       # Smart API URL utility
+├── package.json
+├── requirements.txt      # Python deps for Vercel
+└── vercel.json          # Vercel configuration
+```
 
-## Learn More
+## 🛠️ Available Scripts
 
-To learn more about Next.js, take a look at the following resources:
+- `npm run dev` - Start both frontend and backend
+- `npm run dev:nextjs` - Start only Next.js frontend
+- `npm run build` - Build for production
+- `npm start` - Start production server
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔧 Troubleshooting
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### "Cannot connect to server" Error
 
-## Deploy on Vercel
+Make sure Python dependencies are installed:
+```bash
+cd server
+python -m pip install -r requirements.txt
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Then restart:
+```bash
+npm run dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Port Already in Use
+
+If port 8000 or 3000 is already in use, close the application using those ports and try again.
+
+### Module Not Found
+
+```bash
+# Reinstall Node.js dependencies
+npm install
+
+# Reinstall Python dependencies
+cd server
+python -m pip install -r requirements.txt
+```
+
+## 🎉 Features
+
+- ✅ Download YouTube videos
+- ✅ Download Instagram Reels/Posts
+- ✅ Download Twitter/X videos
+- ✅ Multiple quality options
+- ✅ Audio-only downloads
+- ✅ Beautiful, modern UI
+- ✅ Fully responsive
+- ✅ SEO optimized
+
+## 📝 License
+
+This project is open source and available for personal use.
+
+## 🙏 Credits
+
+- Built with [Next.js](https://nextjs.org/)
+- Backend powered by [FastAPI](https://fastapi.tiangolo.com/)
+- Video extraction using [yt-dlp](https://github.com/yt-dlp/yt-dlp)
