@@ -3,15 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently -n \"FRONTEND,BACKEND\" -c \"cyan,green\" \"npm:dev:next\" \"npm:dev:server\"",
-    "dev:next": "next dev",
-    "dev:server": "cd server && python -m uvicorn main:app --reload --host 127.0.0.1 --port 8000",
-    "dev:nextjs": "next dev",
+    "dev": "next dev",
+    "dev:backend": "cd server && python -m uvicorn main:app --reload --host 127.0.0.1 --port 8000",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "@distube/ytdl-core": "^4.16.12",
+    "axios": "^1.13.2",
     "next": "16.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3"

@@ -2,139 +2,104 @@
 
 Free, fast, and easy video downloads from YouTube, Instagram, and Twitter.
 
-## 🚀 Quick Start
+**Separate Backend & Frontend Architecture** - Deploy backend on AWS and frontend on Vercel!
 
-### One Command to Start Everything!
+## 🏗️ Architecture
 
+```
+┌─────────────────┐         ┌─────────────────┐
+│   Frontend      │         │    Backend       │
+│   (Next.js)     │────────▶│   (FastAPI)      │
+│   Vercel        │  HTTP   │   AWS            │
+└─────────────────┘         └─────────────────┘
+```
+
+## 🚀 Quick Start (Local Development)
+
+### 1. Start Backend (FastAPI)
 ```bash
+cd server
+python -m pip install -r requirements.txt
+python -m uvicorn main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Backend runs on: **http://127.0.0.1:8000**
+
+### 2. Start Frontend (Next.js)
+```bash
+npm install
 npm run dev
 ```
 
-That's it! This will automatically start:
-- ✅ Next.js frontend (http://localhost:3000)
-- ✅ FastAPI backend (http://127.0.0.1:8000)
-
-**No need to run servers separately!**
+Frontend runs on: **http://localhost:3000**
 
 ## 📋 Prerequisites
 
-1. **Node.js** (v18 or higher)
-   - Install from [nodejs.org](https://nodejs.org/)
+1. **Node.js** (v18 or higher) - For frontend
+2. **Python** (v3.9 or higher) - For backend
 
-2. **Python** (v3.9 or higher)
-   - Install from [python.org](https://www.python.org/)
+## 🌐 Deployment
 
-3. **Install Dependencies**
+### Backend Deployment (AWS)
 
-   ```bash
-   # Install Node.js dependencies
-   npm install
-   
-   # Install Python dependencies
-   cd server
-   python -m pip install -r requirements.txt
-   cd ..
-   ```
+See `DEPLOYMENT_SEPARATE.md` for detailed instructions.
 
-## 🎯 Usage
+**Quick Options:**
+- **AWS Elastic Beanstalk** (Easiest)
+- **AWS EC2** (More control)
+- **AWS Lambda** (Serverless)
 
-### Development
-
-```bash
-# Start both frontend and backend
-npm run dev
-```
-
-Then open your browser to: **http://localhost:3000**
-
-### Build for Production
-
-```bash
-npm run build
-npm start
-```
-
-## 🌐 Deploy to Vercel
-
-Everything is configured for single deployment!
+### Frontend Deployment (Vercel)
 
 1. **Push to GitHub**
    ```bash
-   git add .
-   git commit -m "Ready for deployment"
-   git push
+   git push origin main
    ```
 
 2. **Deploy on Vercel**
    - Go to [vercel.com](https://vercel.com)
-   - Click "New Project"
    - Import your repository
+   - **Set Environment Variable:**
+     - Key: `NEXT_PUBLIC_API_URL`
+     - Value: Your AWS backend URL
    - Click "Deploy"
 
-**That's it!** Vercel will automatically:
-- ✅ Build your Next.js app
-- ✅ Deploy Python serverless functions
-- ✅ Everything works together!
+## 🔧 Configuration
+
+### Environment Variables
+
+**Frontend (Vercel):**
+- `NEXT_PUBLIC_API_URL` - Your AWS backend URL
+  - Example: `https://reelsnap-backend.elasticbeanstalk.com`
+
+**Backend (AWS):**
+- `FRONTEND_URL` - Your Vercel frontend URL
+  - Example: `https://your-app.vercel.app`
+- `ALLOWED_ORIGINS` - Comma-separated list of allowed origins
 
 ## 📁 Project Structure
 
 ```
-├── api/                  # Python serverless functions (for Vercel)
-│   ├── youtube.py
-│   ├── instagram.py
-│   └── twitter.py
-├── server/               # FastAPI backend (for local dev)
-│   ├── main.py
-│   └── requirements.txt
-├── src/                  # Next.js frontend
+reelsnap/
+├── server/                 # Backend (FastAPI)
+│   ├── main.py            # FastAPI application
+│   └── requirements.txt    # Python dependencies
+│
+├── src/                    # Frontend (Next.js)
 │   ├── app/
+│   │   ├── youtube/       # YouTube page
+│   │   ├── instagram/     # Instagram page
+│   │   └── twitter/       # Twitter page
 │   └── lib/
-│       └── api.ts       # Smart API URL utility
-├── package.json
-├── requirements.txt      # Python deps for Vercel
-└── vercel.json          # Vercel configuration
-```
-
-## 🛠️ Available Scripts
-
-- `npm run dev` - Start both frontend and backend
-- `npm run dev:nextjs` - Start only Next.js frontend
-- `npm run build` - Build for production
-- `npm start` - Start production server
-
-## 🔧 Troubleshooting
-
-### "Cannot connect to server" Error
-
-Make sure Python dependencies are installed:
-```bash
-cd server
-python -m pip install -r requirements.txt
-```
-
-Then restart:
-```bash
-npm run dev
-```
-
-### Port Already in Use
-
-If port 8000 or 3000 is already in use, close the application using those ports and try again.
-
-### Module Not Found
-
-```bash
-# Reinstall Node.js dependencies
-npm install
-
-# Reinstall Python dependencies
-cd server
-python -m pip install -r requirements.txt
+│       └── api.ts         # API utility
+│
+├── package.json           # Frontend dependencies
+└── README.md
 ```
 
 ## 🎉 Features
 
-- ✅ Download YouTube videos
+- ✅ Download YouTube videos (including live streams)
 - ✅ Download Instagram Reels/Posts
 - ✅ Download Twitter/X videos
 - ✅ Multiple quality options
@@ -143,12 +108,44 @@ python -m pip install -r requirements.txt
 - ✅ Fully responsive
 - ✅ SEO optimized
 
+## 🔧 API Endpoints
+
+### Backend API (FastAPI)
+
+- `GET /` - API status
+- `GET /health` - Health check
+- `POST /youtube` - Get YouTube video formats
+- `POST /instagram` - Get Instagram video formats
+- `POST /twitter` - Get Twitter video formats
+
+### Example Request
+```bash
+curl -X POST http://your-backend-url/youtube \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://youtube.com/watch?v=..."}'
+```
+
+## 🐛 Troubleshooting
+
+### "405 Error" or "Method Not Allowed"
+- Make sure you're using `POST` method for API endpoints
+- Check that backend is running on port 8000
+- Verify CORS is configured correctly
+
+### "Cannot connect to server"
+- Make sure backend is running: `cd server && python -m uvicorn main:app --reload`
+- Check backend URL in `NEXT_PUBLIC_API_URL` environment variable
+
+### CORS Errors
+- Update backend CORS to include your frontend URL
+- Check `ALLOWED_ORIGINS` environment variable in backend
+
 ## 📝 License
 
 This project is open source and available for personal use.
 
 ## 🙏 Credits
 
-- Built with [Next.js](https://nextjs.org/)
+- Built with [Next.js](https://nextjs.org/) (Frontend)
 - Backend powered by [FastAPI](https://fastapi.tiangolo.com/)
 - Video extraction using [yt-dlp](https://github.com/yt-dlp/yt-dlp)

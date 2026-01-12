@@ -1,32 +1,20 @@
 /**
- * Get the API base URL based on the environment
- * - In development: uses FastAPI server (localhost:8000) - started automatically with npm run dev
- * - In production (Vercel): uses serverless functions (/api) - deployed automatically
+ * Get the API base URL for separate FastAPI backend
+ * - Development: Uses local FastAPI server (http://127.0.0.1:8000)
+ * - Production: Uses environment variable NEXT_PUBLIC_API_URL (your AWS backend URL)
  */
 export function getApiUrl(endpoint: string): string {
-  // Check if we're in development mode
-  const isDevelopment = process.env.NODE_ENV === 'development';
+  // Use environment variable for backend URL (set in Vercel for production)
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   
-  // Check if we're running locally (localhost or 127.0.0.1)
-  const isLocalhost = 
-    typeof window !== 'undefined' && 
-    (window.location.hostname === 'localhost' || 
-     window.location.hostname === '127.0.0.1');
-  
-  // Check if we should force API routes (for Vercel CLI or production)
-  const useApiRoutes = process.env.NEXT_PUBLIC_USE_API_ROUTES === 'true';
-  
-  // In production (Vercel), always use API routes
-  if (!isDevelopment) {
-    return `/api${endpoint}`;
+  // If API URL is set (production), use it
+  if (apiUrl) {
+    // Remove trailing slash if present
+    const baseUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;
+    return `${baseUrl}${endpoint}`;
   }
   
-  // In development on localhost, use FastAPI server (runs automatically with npm run dev)
-  // Unless explicitly told to use API routes
-  if (isDevelopment && isLocalhost && !useApiRoutes) {
-    return `http://127.0.0.1:8000${endpoint}`;
-  }
-  
-  // Default: Use API routes (for Vercel CLI or when explicitly set)
-  return `/api${endpoint}`;
+  // Development: Use local FastAPI server
+  // Make sure to start it with: cd server && python -m uvicorn main:app --reload --host 127.0.0.1 --port 8000
+  return `http://43.204.110.208:8000${endpoint}`;
 }
